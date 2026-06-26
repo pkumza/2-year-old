@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2岁5个月小小互动课</title>
+  <style>
+    :root {
+      --bg: #fff7ed;
+      --ink: #243047;
+      --muted: #697386;
+      --line: #eadfd2;
+      --panel: rgba(255, 255, 255, 0.92);
+      --rose: #fb7185;
+      --sky: #38bdf8;
+      --leaf: #34d399;
+      --sun: #fbbf24;
+      --grape: #a78bfa;
+      --orange: #fb923c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.2), transparent 26%),
+        radial-gradient(circle at 92% 18%, rgba(251, 191, 36, 0.22), transparent 24%),
+        radial-gradient(circle at 76% 92%, rgba(52, 211, 153, 0.18), transparent 24%),
+        var(--bg);
+    }
+
+    main {
+      width: min(1060px, 100%);
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 8px 0 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 6vw, 58px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .progress {
+      min-width: 132px;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.78);
+      font-size: 18px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .lesson {
+      display: none;
+      min-height: 548px;
+      padding: clamp(18px, 4vw, 34px);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 18px 48px rgba(36, 48, 71, 0.1);
+    }
+
+    .lesson.active {
+      display: block;
+    }
+
+    .kicker {
+      margin: 0 0 8px;
+      color: #0f766e;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .lesson h2 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 42px);
+      letter-spacing: 0;
+    }
+
+    .prompt {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 22px;
+      line-height: 1.35;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      color: var(--ink);
+      background: white;
+      cursor: pointer;
+      font: inherit;
+      transition: transform 120ms ease, box-shadow 120ms ease, outline-color 120ms ease;
+      touch-action: manipulation;
+    }
+
+    button:disabled {
+      cursor: default;
+      opacity: 0.5;
+    }
+
+    button:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .big-choice {
+      min-height: 150px;
+      padding: 18px;
+      border: 2px solid var(--line);
+      box-shadow: 0 8px 22px rgba(36, 48, 71, 0.08);
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .color-dot {
+      display: block;
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.72);
+      box-shadow: inset 0 0 0 2px rgba(36, 48, 71, 0.12);
+    }
+
+    .emoji-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      min-height: 104px;
+      margin: 10px 0 22px;
+      font-size: 72px;
+      line-height: 1;
+    }
+
+    .number-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .number-button {
+      min-height: 110px;
+      border: 2px solid var(--line);
+      background: #f8fafc;
+      font-size: 42px;
+      font-weight: 900;
+    }
+
+    .shape-stage {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      align-items: center;
+      margin-top: 22px;
+    }
+
+    .shape-button {
+      min-height: 190px;
+      border: 2px solid var(--line);
+      display: grid;
+      place-items: center;
+    }
+
+    .shape {
+      width: 92px;
+      height: 92px;
+      background: var(--sky);
+    }
+
+    .circle {
+      border-radius: 50%;
+      background: var(--sun);
+    }
+
+    .square {
+      border-radius: 8px;
+      background: var(--leaf);
+    }
+
+    .triangle {
+      width: 0;
+      height: 0;
+      border-left: 58px solid transparent;
+      border-right: 58px solid transparent;
+      border-bottom: 100px solid var(--rose);
+      background: transparent;
+    }
+
+    .size-stage {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      align-items: end;
+      margin-top: 28px;
+    }
+
+    .size-button {
+      min-height: 240px;
+      border: 2px solid var(--line);
+      display: grid;
+      place-items: end center;
+      padding: 22px;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .ball {
+      display: block;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: var(--grape);
+      box-shadow: inset -10px -12px 0 rgba(36, 48, 71, 0.12);
+    }
+
+    .ball.small {
+      width: 72px;
+      height: 72px;
+    }
+
+    .ball.large {
+      width: 142px;
+      height: 142px;
+    }
+
+    .sound-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .sound-button {
+      min-height: 160px;
+      border: 2px solid var(--line);
+      font-size: 72px;
+    }
+
+    .sound-button span {
+      display: block;
+      margin-top: 8px;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .movement {
+      display: grid;
+      place-items: center;
+      min-height: 270px;
+      margin-top: 20px;
+      border: 2px dashed var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+      text-align: center;
+    }
+
+    .star {
+      font-size: 100px;
+      line-height: 1;
+      animation: bounce 900ms ease-in-out infinite;
+    }
+
+    .movement p {
+      margin: 12px 0 0;
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+
+    .feedback {
+      min-height: 50px;
+      margin: 18px 0 0;
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f766e;
+    }
+
+    .feedback.try {
+      color: #b45309;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .nav-button {
+      min-width: 120px;
+      min-height: 54px;
+      padding: 0 18px;
+      color: white;
+      background: #243047;
+      font-weight: 900;
+    }
+
+    .nav-button.secondary {
+      color: var(--ink);
+      background: white;
+      border: 2px solid var(--line);
+    }
+
+    .done-panel {
+      display: grid;
+      place-items: center;
+      min-height: 350px;
+      text-align: center;
+    }
+
+    .badge {
+      width: 160px;
+      height: 160px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: var(--sun);
+      font-size: 86px;
+      box-shadow: 0 16px 30px rgba(251, 191, 36, 0.28);
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding: 16px;
+      }
+
+      header {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .lesson {
+        min-height: auto;
+      }
+
+      .choice-grid,
+      .shape-stage,
+      .size-stage,
+      .sound-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .number-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .big-choice,
+      .shape-button,
+      .sound-button {
+        min-height: 128px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>小小互动课</h1>
+        <p class="subtitle">6 节短课，给 2岁5个月小朋友玩 5 到 8 分钟。</p>
+      </div>
+      <div class="progress" id="progress">1 / 7</div>
+    </header>
+
+    <section class="lesson active" aria-labelledby="lesson-color">
+      <p class="kicker">第 1 课 · 颜色</p>
+      <h2 id="lesson-color">找一找红色</h2>
+      <p class="prompt">请点一下红色的小圆点。</p>
+      <div class="choice-grid">
+        <button class="big-choice" data-answer="no">
+          <span class="color-dot" style="background: var(--sky);"></span>
+          蓝色
+        </button>
+        <button class="big-choice" data-answer="yes">
+          <span class="color-dot" style="background: var(--rose);"></span>
+          红色
+        </button>
+        <button class="big-choice" data-answer="no">
+          <span class="color-dot" style="background: var(--leaf);"></span>
+          绿色
+        </button>
+      </div>
+      <div class="feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="lesson-count">
+      <p class="kicker">第 2 课 · 数量</p>
+      <h2 id="lesson-count">数一数苹果</h2>
+      <p class="prompt">这里有几个苹果？</p>
+      <div class="emoji-row" aria-label="三个苹果">🍎 🍎 🍎</div>
+      <div class="number-row">
+        <button class="number-button" data-answer="no">1</button>
+        <button class="number-button" data-answer="no">2</button>
+        <button class="number-button" data-answer="yes">3</button>
+        <button class="number-button" data-answer="no">4</button>
+      </div>
+      <div class="feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="lesson-shape">
+      <p class="kicker">第 3 课 · 形状</p>
+      <h2 id="lesson-shape">找一找圆形</h2>
+      <p class="prompt">请点一下圆圆的形状。</p>
+      <div class="shape-stage">
+        <button class="shape-button" data-answer="no" aria-label="正方形">
+          <span class="shape square"></span>
+        </button>
+        <button class="shape-button" data-answer="yes" aria-label="圆形">
+          <span class="shape circle"></span>
+        </button>
+        <button class="shape-button" data-answer="no" aria-label="三角形">
+          <span class="shape triangle"></span>
+        </button>
+      </div>
+      <div class="feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="lesson-size">
+      <p class="kicker">第 4 课 · 大小</p>
+      <h2 id="lesson-size">哪个球更大？</h2>
+      <p class="prompt">请点一下大大的球。</p>
+      <div class="size-stage">
+        <button class="size-button" data-answer="no">
+          <span class="ball small"></span>
+          小球
+        </button>
+        <button class="size-button" data-answer="yes">
+          <span class="ball large"></span>
+          大球
+        </button>
+      </div>
+      <div class="feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="lesson-sound">
+      <p class="kicker">第 5 课 · 声音</p>
+      <h2 id="lesson-sound">谁会“喵喵”？</h2>
+      <p class="prompt">听一听，找一找会喵喵叫的小动物。</p>
+      <div class="sound-grid">
+        <button class="sound-button" data-answer="no" data-sound="小狗汪汪">
+          🐶
+          <span>小狗</span>
+        </button>
+        <button class="sound-button" data-answer="yes" data-sound="小猫喵喵">
+          🐱
+          <span>小猫</span>
+        </button>
+        <button class="sound-button" data-answer="no" data-sound="小鸭嘎嘎">
+          🐥
+          <span>小鸭</span>
+        </button>
+      </div>
+      <div class="feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="lesson-action">
+      <p class="kicker">第 6 课 · 动作</p>
+      <h2 id="lesson-action">动一动身体</h2>
+      <p class="prompt">和小星星一起跳两下，然后点这里。</p>
+      <button class="movement" data-action="jump">
+        <span>
+          <span class="star" aria-hidden="true">⭐</span>
+          <p>跳一跳</p>
+        </span>
+      </button>
+      <div class="feedback" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="lesson-done">
+      <p class="kicker">完成</p>
+      <h2 id="lesson-done">今天完成啦</h2>
+      <div class="done-panel">
+        <div>
+          <div class="badge" aria-hidden="true">✓</div>
+          <p class="prompt">可以抱一抱、喝口水，再玩一遍。</p>
+        </div>
+      </div>
+      <div class="feedback" aria-live="polite"></div>
+    </section>
+
+    <nav>
+      <button class="nav-button secondary" id="prevButton">上一步</button>
+      <button class="nav-button" id="nextButton">下一步</button>
+    </nav>
+  </main>
+
+  <script>
+    const lessons = Array.from(document.querySelectorAll(".lesson"));
+    const progress = document.getElementById("progress");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+    let current = 0;
+
+    function showLesson(index) {
+      current = Math.max(0, Math.min(index, lessons.length - 1));
+      lessons.forEach((lesson, lessonIndex) => {
+        lesson.classList.toggle("active", lessonIndex === current);
+      });
+      progress.textContent = `${current + 1} / ${lessons.length}`;
+      prevButton.disabled = current === 0;
+      nextButton.textContent = current === lessons.length - 1 ? "再玩一遍" : "下一步";
+    }
+
+    function speak(text) {
+      if (!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "zh-CN";
+      utterance.rate = 0.86;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function setFeedback(target, text, isTryAgain = false) {
+      const lesson = target.closest(".lesson");
+      const feedback = lesson.querySelector(".feedback");
+      feedback.textContent = text;
+      feedback.classList.toggle("try", isTryAgain);
+      speak(text);
+    }
+
+    function clearMarks() {
+      lessons.forEach((lesson) => {
+        lesson.querySelector(".feedback").textContent = "";
+        lesson.querySelectorAll("button").forEach((button) => {
+          button.style.outline = "";
+        });
+      });
+    }
+
+    document.querySelectorAll("[data-answer]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const label = button.dataset.sound ? `${button.dataset.sound}。` : "";
+        if (button.dataset.answer === "yes") {
+          setFeedback(button, `${label}答对啦！真棒。`);
+          button.style.outline = "5px solid rgba(52, 211, 153, 0.45)";
+        } else {
+          setFeedback(button, `${label}再试一次。`, true);
+          button.style.outline = "5px solid rgba(251, 191, 36, 0.45)";
+        }
+      });
+    });
+
+    document.querySelector("[data-action='jump']").addEventListener("click", (event) => {
+      setFeedback(event.currentTarget, "跳得好！身体醒醒啦。");
+    });
+
+    prevButton.addEventListener("click", () => showLesson(current - 1));
+    nextButton.addEventListener("click", () => {
+      if (current === lessons.length - 1) {
+        clearMarks();
+        showLesson(0);
+        return;
+      }
+      showLesson(current + 1);
+    });
+
+    showLesson(0);
+  </script>
+</body>
+</html>
