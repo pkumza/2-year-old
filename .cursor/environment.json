@@ -1,6 +1,12 @@
 {
   "name": "2-year-old",
-  "start": "if curl -sf -o /dev/null http://localhost:8000/index.html 2>/dev/null; then echo 'static-server already running on :8000'; else nohup python3 -m http.server 8000 > /tmp/static-server.log 2>&1 & fi; for i in $(seq 1 20); do curl -sf -o /dev/null http://localhost:8000/index.html && { echo 'static-server up on :8000'; break; }; sleep 0.5; done",
+  "terminals": [
+    {
+      "name": "static-server",
+      "command": "python3 -m http.server 8000",
+      "description": "Serves the static HTML course pages from the repo root. Open http://localhost:8000/index.html"
+    }
+  ],
   "ports": [
     {
       "name": "web",
